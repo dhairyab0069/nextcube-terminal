@@ -1,0 +1,70 @@
+# Builds, checks and deploys nextcube-terminal to GitHub Pages
+# (served at https://dhairyab0069.github.io/nextcube-terminal/).
+#
+# - Pull requests: build + checks only (no deploy), so broken HTML, missing
+#   files or module syntax errors fail the PR.
+# - Push to main / manual run / repository_dispatch "rebuild": build, check,
+#   deploy. The main site embeds whatever is live here, so it doesn't need
+#   redeploying when this repo changes.
+#
+# Requires Settings → Pages → Source = "GitHub Actions".
+
+name: Deploy terminal
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [rebuild]
+
+permissions:
+  contents: read
+
+# One deploy at a time; let an in-flight deploy finish rather than cancel it.
+concurrency:
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Build _site (cache-bust, version.json, file/import/syntax checks)
+        run: node .github/scripts/build.mjs
+
+      - name: Validate HTML
+        run: npx --yes html-validate@10.9.0 _site/index.html
+
+      - name: Check external links (non-blocking)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config lychee.toml --no-progress _site/index.html
+          fail: false
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

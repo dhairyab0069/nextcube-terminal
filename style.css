@@ -1,0 +1,56 @@
+/* nextcube-terminal. Theme variables and terminal rules mirror style.css in
+   the main site repo (dhairyab0069.github.io), so the embedded terminal looks
+   native there. Keep the two in sync when changing colours. */
+:root,[data-theme="dark"]{
+      --text-xs:clamp(.75rem,.7rem + .25vw,.875rem);--text-sm:clamp(.875rem,.8rem + .35vw,1rem);--text-base:clamp(1rem,.95rem + .25vw,1.125rem);--text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);--text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);--text-2xl:clamp(2.2rem,1.2rem + 4vw,4.8rem);
+      --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;
+      --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.875rem;--radius-xl:1.25rem;--radius-full:9999px;
+      --font-body:'Satoshi','Inter',sans-serif;--font-display:'Cabinet Grotesk','Arial Black',sans-serif;
+      --color-bg:#05070b;--color-surface:#0d1119;--color-surface-2:#121826;--color-surface-3:#1a2233;--color-panel:#090c12;--color-border:rgba(220,232,255,.14);--color-divider:rgba(220,232,255,.08);--color-text:#edf3ff;--color-text-muted:#9eaac7;--color-text-faint:#657290;--color-primary:#55c1ff;--color-primary-2:#1b8bd2;--color-magenta:#ff56d7;--color-gold:#ffd166;--color-green:#93f0bb;--shadow-sm:0 2px 4px rgba(0,0,0,.25);--shadow-md:0 12px 30px rgba(0,0,0,.45);--shadow-lg:0 28px 80px rgba(0,0,0,.62);--transition:180ms cubic-bezier(.16,1,.3,1);
+    }
+    [data-theme="light"]{--color-bg:#dde8f5;--color-surface:#e8f0fa;--color-surface-2:#f2f7ff;--color-surface-3:#cfdaee;--color-panel:#e2ecf8;--color-border:rgba(10,28,72,.16);--color-divider:rgba(10,28,72,.1);--color-text:#04111e;--color-text-muted:#0050a3;--color-text-faint:#4a5fa0;--color-primary:#0050a3;--color-primary-2:#003a7a;--color-magenta:#6b0aaa;--color-gold:#7a4d00;--color-green:#0e4f2e;--shadow-sm:0 1px 3px rgba(6,18,45,.1);--shadow-md:0 12px 30px rgba(6,18,45,.18);--shadow-lg:0 24px 60px rgba(6,18,45,.22)}
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
+    .toolbar{display:flex;gap:.45rem;align-items:center}.toolbar button{min-height:30px;padding:0 .75rem;border-radius:999px;border:1px solid var(--color-border);background:rgba(255,255,255,.03);color:var(--color-text-muted);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;transition:all var(--transition);cursor:pointer}.toolbar button:hover{background:rgba(85,193,255,.1);color:var(--color-text);border-color:rgba(85,193,255,.28)}
+    .toolbar{margin-left:auto}
+    html,body{height:100%}
+    body{font-family:var(--font-body);color:var(--color-text);background:var(--color-bg);-webkit-font-smoothing:antialiased}
+    button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+    a{color:inherit}
+
+    /* Terminal */
+    [data-theme="light"] .terminal{background:#b8cce0;border-color:rgba(0,50,140,.25)}
+    [data-theme="light"] .terminal-bar{background:#cddaea;border-bottom-color:rgba(0,50,140,.18)}
+    [data-theme="light"] .screen-wrap{background:#b8cce0;color:#04111e}
+    [data-theme="light"] .input-row label{color:#0050a3}
+    [data-theme="light"] #terminal-input{color:#04111e;caret-color:#0050a3}
+    .terminal{background:#04070d;border:1px solid rgba(147,240,187,.14);border-radius:1rem;display:flex;flex-direction:column;height:24rem;overflow:hidden}
+    .terminal-bar{padding:.85rem 1rem;border-bottom:1px solid rgba(147,240,187,.12);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--color-green);flex-shrink:0}
+    .screen-wrap{flex:1;overflow-y:auto;overflow-x:auto;padding:1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;color:#e2fff0;display:flex;flex-direction:column;gap:.45rem;scroll-behavior:smooth;min-height:0}.screen-wrap::-webkit-scrollbar{width:4px}.screen-wrap::-webkit-scrollbar-track{background:transparent}.screen-wrap::-webkit-scrollbar-thumb{background:rgba(147,240,187,.2);border-radius:2px}.screen-wrap::-webkit-scrollbar-thumb:hover{background:rgba(147,240,187,.4)}
+    .screen{display:contents}
+    .screen>div{white-space:pre-wrap;overflow-wrap:anywhere}
+    .terminal:focus-within{border-color:rgba(147,240,187,.45);box-shadow:0 0 0 2px rgba(147,240,187,.15)}
+    .input-row{display:flex;align-items:center;gap:0;margin-top:.1rem;flex-shrink:0;padding:0 0 .5rem 0}
+    .input-row label{color:var(--color-green);white-space:nowrap;flex-shrink:0}
+    .input-row input{flex:1;border:none;background:transparent;color:#e2fff0;padding:0;font:inherit;outline:none;caret-color:var(--color-green)}
+    .input-row input::placeholder{color:transparent}
+      .input-row input{font-size:16px} /* stops iOS zooming on focus */
+    .palette-flip{--color-primary:#ff61df;--color-primary-2:#cb3aad;--color-magenta:#61d7ff}
+    [data-theme="light"].palette-flip,[data-theme="light"] .palette-flip{--color-primary:#a3007f;--color-primary-2:#7a005f;--color-magenta:#005f86}
+
+    /* Standalone page */
+    .page{min-height:100%;display:flex;flex-direction:column;gap:1rem;padding:1rem;max-width:1100px;margin:0 auto}
+    .page-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .page-head h1{font-family:var(--font-display);font-size:var(--text-lg);letter-spacing:.08em;text-transform:uppercase}
+    .page-head a{color:var(--color-primary);font-size:var(--text-sm)}
+    .page .terminal{flex:1;height:auto;min-height:24rem}
+
+    /* Embedded in the main site: the terminal fills the iframe, which the
+       host page frames with its own border and radius. */
+    .embedded body{background:transparent}
+    .embedded .page{padding:0;max-width:none;height:100%}
+    .embedded .page-head{display:none}
+    .embedded .page .terminal{height:100%;min-height:0;border-radius:0;border:none}
+
+    @media (max-width:680px){.input-row input{font-size:16px}}

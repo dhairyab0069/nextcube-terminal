@@ -1,0 +1,6 @@
+# External link check for the deploy workflow (non-blocking; results go to
+# the job log). LinkedIn and a few 88x31 button hosts block bots.
+exclude = ["linkedin\\.com", "discord\\.com"]
+accept = ["200..=299", "403", "429"]
+max_retries = 2
+timeout = 20

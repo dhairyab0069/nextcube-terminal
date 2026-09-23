@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>nextcube terminal · Dhairya Bhatia</title>
+  <meta name="description" content="A virtual NeXTSTEP-style Unix shell with a 5-flag reverse-engineering CTF, by Dhairya Bhatia." />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=cabinet-grotesk@500,700,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+  <script>
+    // Apply the saved (or system) theme before first paint. The key is shared
+    // with the main site, which is served from the same origin.
+    (function () {
+      var t;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <div class="page">
+    <header class="page-head">
+      <h1>nextcube terminal</h1>
+      <a href="/">← dhairyab0069.github.io</a>
+      <div class="toolbar">
+        <button type="button" data-theme-toggle aria-label="Switch color theme">Light mode</button>
+        <button type="button" data-secret-toggle aria-label="Toggle neon palette" aria-pressed="false">Cheat code</button>
+      </div>
+    </header>
+
+    <main class="terminal" id="terminal">
+      <div class="terminal-bar">dhairya@nextcube — virtualized unix shell</div>
+      <div class="screen-wrap" id="screen-wrap">
+        <div class="screen" id="terminal-output" role="log"></div>
+        <form class="input-row" id="terminal-form">
+          <label id="shell-prompt" for="terminal-input">dhairya@nextcube:~$&nbsp;</label>
+          <input id="terminal-input" autocomplete="off" spellcheck="false" />
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
