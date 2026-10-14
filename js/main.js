@@ -3,8 +3,9 @@
 import { initBridge, send, embedded } from './bridge.js';
 import { initTheme } from './theme.js';
 import { initKonami } from './konami.js';
+import { loadFs, loadShellPrefs } from './shell/storage.js';
 import { initRepl } from './shell/repl.js';
-import { updatePromptLabel } from './shell/state.js';
+import { updatePromptLabel, shell } from './shell/state.js';
 import { printBanner } from './shell/banner.js';
 import { mountPublications } from './publications.js';
 import { ctfState } from './ctf/flags.js';
@@ -13,6 +14,8 @@ initTheme();
 initBridge();     // after initTheme so the parent's first theme/cheat message is handled
 initKonami();
 
+loadFs();             // restore the visitor's files before anything reads the VFS
+loadShellPrefs(shell);
 initRepl();
 updatePromptLabel();
 printBanner();
