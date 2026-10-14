@@ -1,7 +1,8 @@
 // The virtual filesystem the terminal browses. Pure data — no DOM, no side effects.
 // `hidden: true` entries only show under `ls -a`; the CTF flags live in here.
+// HOME is /home/dhairya; VFS (bottom of the file) is the root it hangs off.
 
-export const VFS = {
+export const HOME = {
   type: 'dir', modified: 'Sep  1 2025',
   entries: {
     'about.txt': { type: 'file', size: 248, modified: 'Sep  1 2025',
@@ -21,7 +22,8 @@ linkedin  linkedin.com/in/dhairyanbhatia
 github    github.com/dhairyab0069
 web       dhairyab0069.github.io` },
     'resume.pdf': { type: 'file', size: 89012, modified: 'May 16 09:14',
-      content: '[binary PDF]\n→ https://drive.google.com/file/d/1_D8LCjK2bfaHo3-4DXggA0et4CKQkHvg/view?usp=sharing' },
+      url: 'https://dhairyab0069.github.io/resume/Dhairya_Bhatia_Resume.pdf',
+      content: '[binary PDF]\n→ https://dhairyab0069.github.io/resume/Dhairya_Bhatia_Resume.pdf\n(run: open resume.pdf)' },
     'research': { type: 'dir', modified: 'May 10 14:33', entries: {
       'cactilab': { type: 'dir', modified: 'May 10 14:33', entries: {
         'README.md': { type: 'file', size: 512, modified: 'May 10 14:33',
@@ -151,4 +153,32 @@ GLI Emerging Graduate Leader Award
   }
 };
 
-// Shell state
+const dir = (entries = {}, extra = {}) => ({ type: 'dir', modified: 'Sep  1 2025', entries, ...extra });
+const file = (content, extra = {}) => ({ type: 'file', size: content.length, modified: 'Sep  1 2025', content, ...extra });
+
+export const HOME_PATH = ['home', 'dhairya'];
+
+export const VFS = dir({
+  bin: dir(),   // one entry per command, filled in by commands/index.js
+  dev: dir({ null: file(''), tty: file('') }),
+  etc: dir({
+    hostname: file('nextcube\n'),
+    'os-release': file('NAME="NeXTSTEP"\nVERSION="4.2"\nID=nextstep\nPRETTY_NAME="NeXTSTEP 4.2 (nextcube 68040)"\nHOME_URL="https://dhairyab0069.github.io"\n'),
+    passwd: file('root:x:0:0:root:/root:/bin/sh\ndhairya:x:501:20:Dhairya Bhatia:/home/dhairya:/bin/zsh\nnobody:x:65534:65534:nobody:/nonexistent:/usr/bin/false\n'),
+    group: file('wheel:x:0:root\nstaff:x:20:dhairya\nresearch:x:42:dhairya\n'),
+    shells: file('/bin/sh\n/bin/bash\n/bin/zsh\n'),
+    motd: file('Welcome to nextcube. Everything here is pretend, but the commands are real enough.\nType help for the command list, man <cmd> for details.\n'),
+  }),
+  home: dir({ dhairya: HOME }),
+  root: dir({}, { locked: true }),
+  tmp: dir(),
+  usr: dir({
+    bin: dir(),
+    share: dir({ doc: dir({ 'README': file('Nothing to see here. Try ~/ instead.\n') }) }),
+  }),
+  var: dir({
+    log: dir({
+      'auth.log': file('Sep  1 00:00:01 nextcube sshd[42]: Accepted publickey for dhairya\nSep  1 00:00:07 nextcube sudo: dhairya : user NOT in sudoers ; COMMAND=/bin/rm -rf /\n'),
+    }),
+  }),
+});

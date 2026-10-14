@@ -54,3 +54,27 @@
     .embedded .page .terminal{height:100%;min-height:0;border-radius:0;border:none}
 
     @media (max-width:680px){.input-row input{font-size:16px}}
+
+    /* nano */
+    .nano{flex:1;min-height:0;display:flex;flex-direction:column;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;color:#e2fff0;background:#04070d}
+    .nano[hidden]{display:none}
+    .nano-title,.nano-status:not(:empty){background:#93f0bb;color:#04070d}
+    .nano-title{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;padding:.2rem .75rem;flex-shrink:0}
+    .nano-name{text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .nano-mod{text-align:right}
+    .nano-area,.nano-help{flex:1;min-height:0;width:100%;resize:none;border:0;outline:none;background:transparent;color:inherit;font:inherit;line-height:1.45;padding:.5rem .75rem;caret-color:#93f0bb;white-space:pre;overflow:auto;tab-size:2}
+    .nano-help[hidden],.nano-area[hidden],.nano-prompt[hidden]{display:none}
+    .nano-status{justify-self:center;align-self:center;margin:.15rem auto;padding:0 .5rem;min-height:1.35em;white-space:pre-wrap;text-align:center;flex-shrink:0}
+    .nano-prompt{display:flex;align-items:center;gap:0;padding:.1rem .75rem;background:#93f0bb;color:#04070d;flex-shrink:0}
+    .nano-prompt:focus{outline:none}
+    .nano-prompt-label{white-space:pre}
+    .nano-prompt-input{flex:1;border:0;outline:none;background:transparent;color:inherit;font:inherit;padding:0}
+    .nano-foot{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.1rem .5rem;padding:.35rem .75rem .5rem;flex-shrink:0;border-top:1px solid rgba(147,240,187,.12)}
+    .nano-key{text-align:left;color:var(--color-text-muted);font:inherit;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:.2rem 0;border-radius:.25rem;cursor:pointer}
+    .nano-key:hover{color:var(--color-text)}
+    .nano-key kbd{font:inherit;background:#93f0bb;color:#04070d;padding:0 .2rem;border-radius:2px}
+    [data-theme="light"] .nano{background:#b8cce0;color:#04111e}
+    [data-theme="light"] .nano-title,[data-theme="light"] .nano-status:not(:empty),[data-theme="light"] .nano-prompt,[data-theme="light"] .nano-key kbd{background:#0050a3;color:#fff}
+    [data-theme="light"] .nano-area{caret-color:#0050a3}
+    @media (max-width:680px){.nano-foot{grid-template-columns:repeat(3,minmax(0,1fr))}.nano-area,.nano-prompt-input{font-size:16px}}
+    .screen-wrap[hidden]{display:none}

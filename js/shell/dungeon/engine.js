@@ -1,7 +1,7 @@
 // The dungeon command loop. While `window._dgMode` is set, the shell routes
 // every line here instead of to the normal command table.
 
-import { output, w, esc } from '../output.js';
+import { w, esc, clearScreen } from '../output.js';
 
 function dgRoom()  { return window._dg.rooms[window._dg.room]; }
 function dgEnemy() {
@@ -43,7 +43,7 @@ export function dgCmd(line) {
     dg.active=false; window._dgMode=false;
     w(`<span ${f}>Exiting dungeon.</span>`); return;
   }
-  if (cmd==='clear') { output.innerHTML=''; return; }
+  if (cmd==='clear') { clearScreen(); return; }
   if (cmd==='look') { dgLook(); return; }
   if (cmd==='inventory'||cmd==='inv') {
     if (!dg.inventory.length) { w(`<span ${f}>Inventory empty.</span>`); return; }

@@ -5,7 +5,7 @@
 // NOTE: toBibtex mirrors js/publications.js in the main site repo; keep the
 // two in sync if the BibTeX format changes.
 
-import { VFS } from './shell/vfs.js';
+import { HOME } from './shell/vfs.js';
 
 const DATA_URL = '/data/publications.json';
 
@@ -52,5 +52,5 @@ export async function mountPublications() {
     const bib = toBibtex(p);
     entries[`${p.id}.bib`] = { type: 'file', size: bib.length, modified: 'Sep  8 2026', content: bib };
   }
-  VFS.entries.publications = { type: 'dir', modified: 'Sep  8 2026', entries };
+  HOME.entries.publications = { type: 'dir', modified: 'Sep  8 2026', entries };
 }

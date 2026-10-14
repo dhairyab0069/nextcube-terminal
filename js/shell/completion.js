@@ -1,32 +1,47 @@
-// Tab completion: command names on the first word, filenames after that.
-// Filenames complete relative to any directory part of the word being typed,
-// so `cat research/ca<Tab>` works as well as `cat ab<Tab>`.
+// Tab completion: command names in command position (start of line, or
+// after | ; && ||), file paths everywhere else. Completes the longest common
+// prefix, and lists the candidates when that's ambiguous.
 
 import { CMDS } from './commands/index.js';
-import { getNode, resolvePath } from './state.js';
-import { w } from './output.js';
+import { getNode, resolvePath, shell } from './state.js';
+import { w, esc, dirSpan, fileSpan, execSpan } from './output.js';
+
+const lcp = (strs) => strs.reduce((a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return a.slice(0, i); });
 
 export function tabComplete(val) {
-  const parts = val.split(' ');
-  const last = parts[parts.length - 1];
-  if (parts.length === 1) {
-    const matches = Object.keys(CMDS).filter(c => c.startsWith(last));
-    if (matches.length === 1) return matches[0] + ' ';
-    if (matches.length > 1) w(matches.join('  '));
-    return val;
-  }
-  const slash = last.lastIndexOf('/');
-  const dirPart = slash >= 0 ? last.slice(0, slash + 1) : '';
-  const stem = last.slice(slash + 1);
-  const node = getNode(resolvePath(dirPart || '.'));
-  if (node && node.type === 'dir') {
-    const matches = Object.entries(node.entries)
-      .filter(([n]) => n.startsWith(stem));
-    if (matches.length === 1) {
-      const [n, e] = matches[0];
-      return [...parts.slice(0,-1), dirPart + n + (e.type==='dir' ? '/' : '')].join(' ');
+  const word = val.match(/[^\s|;&<>]*$/)[0];
+  const before = val.slice(0, val.length - word.length);
+  const cmdPos = /(^|\|\||&&|[|;&])\s*$/.test(before);
+  let items;   // [{ text, label }]
+  if (cmdPos && !word.includes('/')) {
+    items = [...new Set([...Object.keys(CMDS), ...Object.keys(shell.aliases)])]
+      .filter(c => c.startsWith(word)).sort()
+      .map(c => ({ text: c + ' ', label: esc(c) }));
+  } else {
+    if (word.startsWith('$')) {
+      const stem = word.slice(1).replace(/^\{/, '');
+      items = Object.keys(shell.env).filter(k => k.startsWith(stem)).sort()
+        .map(k => ({ text: (word.startsWith('${') ? '${' + k + '}' : '$' + k), label: esc(k) }));
+    } else {
+      const slash = word.lastIndexOf('/');
+      const dirPart = slash >= 0 ? word.slice(0, slash + 1) : '';
+      const stem = word.slice(slash + 1);
+      const node = getNode(resolvePath(dirPart || '.'));
+      if (!node || node.type !== 'dir' || node.locked) return val;
+      items = Object.keys(node.entries).sort()
+        .filter(n => n.startsWith(stem) && (stem.startsWith('.') || !n.startsWith('.')))
+        .map(n => {
+          const e = node.entries[n];
+          const isDir = e.type === 'dir';
+          return { text: dirPart + n + (isDir ? '/' : ' '), label: isDir ? dirSpan(n) : e.exec ? execSpan(n) : fileSpan(n) };
+        });
     }
-    if (matches.length > 1) w(matches.map(([n,e]) => n+(e.type==='dir'?'/':'')).join('  '));
   }
+  if (!items.length) return val;
+  if (items.length === 1) return before + items[0].text;
+  const common = lcp(items.map(i => i.text.replace(/[ /]$/, (m) => m === '/' ? '/' : '')));
+  if (common.length > word.length) return before + common;
+  const cols = items.map(i => `<span style="display:inline-block;min-width:18ch">${i.label}</span>`);
+  for (let k = 0; k < cols.length; k += 5) w(cols.slice(k, k + 5).join(''));
   return val;
 }

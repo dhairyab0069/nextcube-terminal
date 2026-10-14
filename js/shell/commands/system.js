@@ -1,7 +1,9 @@
 // System-flavoured commands: identity, processes, manual page, fastfetch banner.
 
-import { output, w, wErr, esc, pinScroll } from '../output.js';
+import { w, wErr, esc, pinScroll, clearScreen } from '../output.js';
 import { shell } from '../state.js';
+import { saveShellPrefs } from '../storage.js';
+import { manPage } from './docs.js';
 
 export const systemCommands = {
   whoami() { w(`<span style="color:var(--color-green)">dhairya</span>`); },
@@ -33,9 +35,13 @@ export const systemCommands = {
     }
   },
 
-  history() {
+  history(args) {
+    if (args[0] === '-c') { shell.history.length = 0; saveShellPrefs(shell); return; }
+    const limit = Number(args[0]) || Infinity;
     if (!shell.history.length) { w(`<span style="color:var(--color-text-faint)">(no history)</span>`); return; }
-    shell.history.slice().reverse().forEach((cmd, i) => {
+    const all = shell.history.slice().reverse();
+    all.forEach((cmd, i) => {
+      if (all.length - i > limit) return;
       w(`<span style="color:var(--color-text-faint)">${String(i+1).padStart(4)}  </span><span style="color:var(--color-text)">${esc(cmd)}</span>`);
     });
   },
@@ -75,15 +81,16 @@ export const systemCommands = {
     } else if (!page) {
       wErr('man: missing argument');
       w(`Try: <span style="color:var(--color-green)">man dhairya</span>`);
-    } else {
+    } else if (!manPage(page)) {
       wErr(`No manual entry for ${page}`);
+      return 1;
     }
   },
 
 
 
   fastfetch() {
-    output.innerHTML = '';
+    clearScreen();
     const g  = `style="color:var(--color-green)"`;
     const p  = `style="color:var(--color-primary)"`;
     const f  = `style="color:var(--color-text-faint)"`;
@@ -104,7 +111,7 @@ export const systemCommands = {
       ['Host',     'Dhairya Bhatia'],
       ['Role',     'MS CS \u00b7 Khoury \u00b7 Northeastern'],
       ['Research', 'ACLab \u00b7 MotionBlind \u00b7 video-LLMs'],
-      ['Shell',    'nextcube-term'],
+      ['Shell',    'zsh-ish \u00b7 pipes, redirects, $(\u2026)'],
       ['Stack',    'Python \u00b7 PyTorch \u00b7 SLURM \u00b7 Rust'],
       ['Site',     'dhairyab0069.github.io'],
       ['GitHub',   'github.com/dhairyab0069'],
@@ -123,5 +130,5 @@ export const systemCommands = {
     w('');
   },
 
-  clear() { output.innerHTML = ''; },
+  clear() { clearScreen(); },
 };
