@@ -40,8 +40,13 @@ jobs:
       - name: Build _site (cache-bust, version.json, file/import/syntax checks)
         run: node .github/scripts/build.mjs
 
+      # npx crashes npm's resolver on html-validate's optional vitest/jest peers
+      # ("Cannot read properties of null (reading 'edgesOut')"); install into a
+      # temp prefix with --legacy-peer-deps instead, as the main site does.
       - name: Validate HTML
-        run: npx --yes html-validate@10.9.0 _site/index.html
+        run: |
+          npm install --no-save --no-audit --no-fund --legacy-peer-deps --prefix "$RUNNER_TEMP/html-validate" html-validate@10.9.0
+          "$RUNNER_TEMP/html-validate/node_modules/.bin/html-validate" _site/index.html
 
       - name: Check external links (non-blocking)
         uses: lycheeverse/lychee-action@v2
