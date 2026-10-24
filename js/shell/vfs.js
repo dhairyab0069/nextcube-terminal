@@ -54,7 +54,7 @@ FLAG{gh0st_1n_th3_h4l}` }
     'projects': { type: 'dir', modified: 'Jan 15 2026', entries: {
       'aclab': { type: 'dir', modified: 'May 20 2026', entries: {
         'README.md': { type: 'file', size: 412, modified: 'May 20 2026',
-          content: `# ACLab — Augmented Cognition Lab\nNortheastern University\n\nRole: Research Assistant (May 2026 – Present)\nAdvisor: Prof. Sarah Ostadabbas\n\nContributions:\n  Designed and led MotionBlind — contrastive video benchmark for\n  temporal and motion reasoning in video-LLMs (arXiv:2609.09528)\n  100+ paired clips across 9 motion categories\n  VLM evaluation pipelines on an HPC cluster (SLURM)\n  Collected 50+ video pairs for the TimeBlind Challenge\n  benchmark (CV4Smalls Workshop, CVPR 2026)\n  Paper reviewer — CV4Smalls Workshop, CVPR 2026\n\ncat ~/publications/motionblind.txt` }
+          content: `# ACLab — Augmented Cognition Lab\nNortheastern University\n\nRole: Research Assistant (May 2026 – Present)\nAdvisor: Prof. Sarah Ostadabbas\n\nContributions:\n  Designed and led MotionBlind — contrastive video benchmark for\n  temporal and motion reasoning in video-LLMs (arXiv:2609.09528)\n  100+ paired clips across 9 motion categories\n  VLM evaluation pipelines on an HPC cluster (SLURM)\n  Collected 50+ video pairs for the TimeBlind Challenge\n  benchmark (CV4Smalls Workshop, CVPR 2026)\n\ncat ~/publications/motionblind.txt` }
       }},
       'escalion': { type: 'dir', modified: 'May 16 11:20', entries: {
         'escalion.elf': { type: 'file', size: 18432, modified: 'May 16 11:20',
